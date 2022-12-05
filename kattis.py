@@ -110,10 +110,10 @@ def execute(url):
     casecount = len(list(zip(needed, produced, inputs)))
     for n, p, iname in zip(needed, produced, inputs):
         if n == p:
-            print(f"{iname} OK")
+            print(f"{iname} {green('OK')}")
         else:
             badcount += 1
-            print(f"{iname} BAD # " + yellow(f"python3 {pyname} < {iname}"))
+            print(f"{iname} {red('BAD')} # " + yellow(f"python3 {pyname} < {iname}"))
             lines1 = n.splitlines()
             lines2 = p.splitlines()
             m = max(len(lines1), len(lines2))
