@@ -67,6 +67,9 @@ def ensure(url):
     return False
 
 
+MYPYEXE = "D:/tmp/pypy3.8-v7.3.9-win64/python3.8.exe"
+
+
 def execute(url):
     dirname, pyname, shortestname = names(url)
     inputs = [dirname + "/" + x for x in os.listdir(dirname) if x.startswith("in-")]
@@ -74,7 +77,7 @@ def execute(url):
     cases = list(zip(inputs, outputs))
     jobs = []
     for a, b in cases:
-        args = ["D:/tmp/pypy3.8-v7.3.9-win64/python3.8.exe", pyname]
+        args = [MYPYEXE, pyname]
         f = open(a, "r")
         j = subprocess.Popen(args, stdin=f, stdout=subprocess.PIPE, encoding="UTF-8")
         jobs.append(j)
@@ -113,7 +116,7 @@ def execute(url):
             print(f"{iname} {green('OK')}")
         else:
             badcount += 1
-            print(f"{iname} {red('BAD')} # " + yellow(f"python3 {pyname} < {iname}"))
+            print(f"{iname} {red('BAD')} # " + yellow(f"{MYPYEXE} {pyname} < {iname}"))
             lines1 = n.splitlines()
             lines2 = p.splitlines()
             m = max(len(lines1), len(lines2))
