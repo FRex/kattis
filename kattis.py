@@ -74,7 +74,7 @@ def execute(url):
     cases = list(zip(inputs, outputs))
     jobs = []
     for a, b in cases:
-        args = ["python3", pyname]
+        args = ["D:/tmp/pypy3.8-v7.3.9-win64/python3.8.exe", pyname]
         f = open(a, "r")
         j = subprocess.Popen(args, stdin=f, stdout=subprocess.PIPE, encoding="UTF-8")
         jobs.append(j)
