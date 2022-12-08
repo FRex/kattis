@@ -95,7 +95,7 @@ def execute(url):
             parts.append(f"Position {green(won)} won by {green(n - len(data))}")
             if i > 0:
                 parts.append(f", behind {red(i)} by {red(len(data) - shortest[i-1])}")
-            print(''.join(parts))
+            print("".join(parts))
             break
     if won is None:
         print(shortest)
@@ -124,7 +124,14 @@ def execute(url):
             for a, b in zip(lines1, lines2):
                 parts = [a.rjust(width1), b.rjust(width2)]
                 if a != b:
-                    parts = map(red, parts)
+                    if a.strip() == b.strip():
+                        parts = [
+                            a.replace(" ", ".").rjust(width1),
+                            b.replace(" ", ".").rjust(width2),
+                        ]
+                        parts = map(yellow, parts)
+                    else:
+                        parts = map(red, parts)
                 else:
                     parts = map(green, parts)
                 print("|".join(parts))
