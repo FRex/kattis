@@ -45,7 +45,7 @@ def ensure(url):
 
     with open(pyname, "w"):
         pass
-    codepath = r"C:\Program Files\Microsoft VS Code\Code.exe"
+    codepath = r"C:\Users\rex\AppData\Local\Programs\Microsoft VS Code\Code.exe"
     subprocess.Popen([codepath, pyname])
     print(f"Downloading {url}")
     r = requests.get(url)
