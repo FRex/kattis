@@ -98,6 +98,7 @@ def execute(url):
             parts.append(f"Position {green(won)} won by {green(n - len(data))}")
             if i > 0:
                 parts.append(f", behind {red(i)} by {red(len(data) - shortest[i-1])}")
+                parts.append(f", behind {red(1)} by {red(len(data) - shortest[0])}")
             print("".join(parts))
             break
     if won is None:
