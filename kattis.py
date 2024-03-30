@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import subprocess, sys, os
+import subprocess
+import sys
+import os
 
 # NOTE: requests and bs4 are imported in ensure, to not waste time importing them when they wont be used
 
@@ -24,31 +26,31 @@ def names(url):
 def ensure(url):
     dirname, pyname, shortestname = names(url)
     gotdir = os.path.exists(dirname)
-    # NOTE: requests and bs4 are imported in ensure, to not waste time importing them when they wont be used
+    # NOTE: requests and bs4 are imported here, to not waste time importing them when they wont be used
     if not os.path.exists(shortestname):
-        import requests, bs4
+        import requests, bs4  # pylint: disable=multiple-imports, import-outside-toplevel
 
-        r = requests.get(url + "/statistics")
+        r = requests.get(url + "/statistics", timeout=30)
         print(r)
         s = bs4.BeautifulSoup(r.text, "html.parser")
         nums = s.find("div", {"id": "toplist_shortest_0"}).find_all(
             "td", {"data-type": "length"}
         )
         os.makedirs(dirname, exist_ok=True)
-        with open(shortestname, "w") as f:
+        with open(shortestname, "w", encoding="UTF-8") as f:
             f.write("\n".join(n.text for n in nums) + "\n")
 
     if gotdir:
         return True
 
-    import requests, bs4
+    import requests, bs4  # pylint: disable=multiple-imports, import-outside-toplevel
 
-    with open(pyname, "w"):
+    with open(pyname, "w", encoding="UTF-8"):
         pass
     codepath = r"C:\Users\rex\AppData\Local\Programs\Microsoft VS Code\Code.exe"
-    subprocess.Popen([codepath, pyname])
+    subprocess.run([codepath, pyname], check=False)
     print(f"Downloading {url}")
-    r = requests.get(url)
+    r = requests.get(url, timeout=30)
     print(r)
     s = bs4.BeautifulSoup(r.text, "html.parser")
     data = []
@@ -58,9 +60,9 @@ def ensure(url):
         return
     os.makedirs(dirname, exist_ok=True)
     for i, (a, b) in enumerate(data, 1):
-        with open(f"{dirname}/in-{i}.txt", "w") as f:
+        with open(f"{dirname}/in-{i}.txt", "w", encoding="UTF-8") as f:
             f.write(a)
-        with open(f"{dirname}/out-{i}.txt", "w") as f:
+        with open(f"{dirname}/out-{i}.txt", "w", encoding="UTF-8") as f:
             f.write(b)
     print(f"{len(data)} examples in {dirname}")
     print(pyname)
@@ -78,15 +80,15 @@ def execute(url):
     jobs = []
     for a, b in cases:
         args = [MYPYEXE, pyname]
-        f = open(a, "r")
+        f = open(a, encoding="UTF-8")
         j = subprocess.Popen(args, stdin=f, stdout=subprocess.PIPE, encoding="UTF-8")
         jobs.append(j)
 
-    data = open(pyname).read()
+    data = open(pyname, encoding="UTF-8").read()
     if data.endswith("\n"):
         data = data[:-1]
     print(f"Running {yellow(pyname)} - {green(len(data))} chars")
-    shortest = list(map(int, open(shortestname).read().split()))
+    shortest = list(map(int, open(shortestname, encoding="UTF-8").read().split()))
     won = None
     for i, n in enumerate(shortest):
         if len(data) < n:
