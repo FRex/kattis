@@ -55,7 +55,11 @@ def ensure(url):
     s = bs4.BeautifulSoup(r.text, "html.parser")
     data = []
     for sample in s.find_all(class_="sample"):
-        data.append(x.text for x in sample.find_all("pre"))
+        data.append(list(x.text for x in sample.find_all("pre")))
+        # workaround for when there is no input since its an output only task
+        if len(data[-1]) == 1:
+            data[-1] = [""] + data[-1]
+
     if not data:
         return
     os.makedirs(dirname, exist_ok=True)
